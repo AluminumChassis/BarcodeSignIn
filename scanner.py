@@ -103,18 +103,21 @@ running = 1
 while running:
 	print('Scan ID Now')
 	user_id = input()
-	running=1 if user_id else 0
-	os.system('cls')
-	idExists=columnContains(user_id, numToRow(0))
-	if (idExists<1):	
-		print("Looks like you haven't signed in before. Enter your name: ")
-		name = input()
-		newID(user_id, name)
-	idExists=columnContains(user_id, numToRow(0))
+	if user_id:
+		os.system('cls')
+		idExists=columnContains(user_id, numToRow(0))
+		if (idExists<1):	
+			print("Looks like you haven't signed in before. Enter your name: ")
+			name = input()
+			newID(user_id, name)
+		idExists=columnContains(user_id, numToRow(0))
 
-	day = datetime.datetime.now()
-	signIn(idExists,day)
+		day = datetime.datetime.now()
+		signIn(idExists,day)
+
+		os.system('cls')
+		print('Signed in: ' + user_id)
+	else: 
+		break;
 	
-	os.system('cls')
-	print('Signed in: ' + user_id)
 print("Done signing in")
