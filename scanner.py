@@ -41,8 +41,8 @@ def newDate(time):
 	range=RANGE).execute()
 	values = result.get('values', [])
 
-	r = 'Sheet1!'+numToRow(len(values[0]))+"1"
-	list = [[str(time.month)+"/"+str(time.day)]]
+	r = 'Sheet1!'+numToRow(len(values[0]))+"1:"+numToRow(60)+'1'
+	list = [[str(time.month)+"/"+str(time.day) + " IN"],[str(time.month)+"/"+str(time.day)+" OUT"]]
 	resource = {
 		"majorDimension": "COLUMNS",
 		"values": list
@@ -77,13 +77,13 @@ def rowContains(check, row):
 	return 0
 
 def signIn(index,time):
-	column = rowContains(str(time.month)+"/"+str(time.day),"1")
+	column = rowContains(str(time.month)+"/"+str(time.day) + " IN","1")
 	if(column<2):
 		newDate(time)
 
-	column = rowContains(str(time.month)+"/"+str(time.day),"1")
+	column = rowContains(str(time.month)+"/"+str(time.day) + " IN","1")
 	r = 'Sheet1!'+numToRow(column)+str(index+1)
-	list = [["X"]]
+	list = [[str(time.hour)+":"+str(time.minute)]]
 	resource = {
 		"majorDimension": "COLUMNS",
 		"values": list
