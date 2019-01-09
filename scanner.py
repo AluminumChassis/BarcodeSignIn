@@ -98,12 +98,30 @@ def signIn(index,time):
 	#RANGE = 'Sheet1!'+row+':'+row
 	#result = service.spreadsheets().values().update(spreadsheetId=SPREADSHEET_ID, range=, valueInputOption=value_input_option, body=value_range_body).execute()
 
+def signOut(index,time):
+	column = rowContains(str(time.month)+"/"+str(time.day) + " OUT","1")
+	r = 'Sheet1!'+numToRow(column)+str(index+1)
+	list = [[str(time.hour)+":"+str(time.minute)]]
+	resource = {
+		"majorDimension": "COLUMNS",
+		"values": list
+	}
+	result = sheet.values().update(
+		spreadsheetId=SPREADSHEET_ID,
+		range=r,
+		body=resource,
+		valueInputOption="USER_ENTERED"
+	).execute()
+
+	#RANGE = 'Sheet1!'+row+':'+row
+	#result = service.spreadsheets().values().update(spreadsheetId=SPREADSHEET_ID, range=, valueInputOption=value_input_option, body=value_range_body).execute()
+
 
 running = 1
 while running:
-	print('Scan ID Now')
+	print('Sign-In: Scan ID Now')
 	user_id = input()
-	if user_id:
+	if (user_id!="signout") and (user_id!=""):
 		os.system('cls')
 		idExists=columnContains(user_id, numToRow(0))
 		if (idExists<1):	
@@ -117,7 +135,31 @@ while running:
 
 		os.system('cls')
 		print('Signed in: ' + user_id)
-	else: 
-		break;
-	
+	else:
+		if user_id=="signout": 
+			while running:
+				print('Sign-Out: Scan ID Now')
+				user_id = input()
+				if user_id:
+					os.system('cls')
+					idExists=columnContains(user_id, numToRow(0))
+					if (idExists<1):
+						print("Looks like you haven't signed in before. Enter your name: ")
+						name = input()
+						newID(user_id, name)
+					idExists=columnContains(user_id, numToRow(0))
+
+					day = datetime.datetime.now()
+					signOut(idExists,day)
+
+					os.system('cls')
+					print('Signed out: ' + user_id)
+				else: 
+					break
+			break
+		else:
+			break
+
+
+
 print("Done signing in")
